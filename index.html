@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<meta name="description" content="" />
+		<meta name="author" content="" />
+		<link rel="icon" href="../../favicon.ico" />
+
+		<title>Quoter</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" />
+
+		<!-- Custom styles for this template -->
+		<link href="css/cover.css" rel="stylesheet" />
+
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- Include custom styles -->
+		<link href="css/custom.css" rel="stylesheet" />
+	</head>
+
+	<body>
+
+		<div class="site-wrapper">
+
+			<div class="site-wrapper-inner">
+
+				<div class="cover-container">
+
+					<div class="masthead clearfix">
+						<div class="inner">
+							<h3 class="masthead-brand">Quoter</h3>
+							<nav>
+								<ul class="nav masthead-nav">
+									<li class="active"><a href="#">Home</a></li>
+									<!--
+									<li><a href="#">Features</a></li>
+									<li><a href="#">Contact</a></li>
+									-->	
+								</ul>
+							</nav>
+						</div>
+					</div>
+
+					<div class="inner cover">
+						<h1 class="cover-heading">Fix your quotes today...</h1>
+						<p class="lead">
+							<input id="quoter-query" type="text" class="form-control input-sm" placeholder="ISBN" />	
+						</p>
+						
+						<div id="default-suggestions">
+						  <input class="typeahead" type="text" placeholder="NFL Teams">
+						</div>
+						
+						
+						<div class="media">
+							<div class="media-left">
+								<img src="http://books.google.de/books/content?id=6pbXoAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api" />
+							</div>
+							<div class="media-body">
+								<h4 class="media-heading">Würzburger Notarhandbuch</h4>
+								Würzburger Notarhandbuch
+							</div>
+						</div>
+					</div>
+
+					<div class="mastfoot">
+						<div class="inner">
+							<p>A service brought to you with love from <a href="http://fBrx.github.io">fbrx</a>.</p>
+							<p>Theme based on <a href="https://getbootstrap.com/examples/cover/">Cover</a> by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+
+		<!-- Bootstrap core JavaScript
+    ================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<script src="js/typeahead.bundle.js"></script>
+		
+		<script>
+
+			// constructs the suggestion engine
+			var books = new Bloodhound({
+			  datumTokenizer: function(q) {
+				return Bloodhound.tokenizers.whitespace(q)
+			  },
+			  queryTokenizer: function(q) {
+				return Bloodhound.tokenizers.whitespace(q)
+			  },
+			  identify: function(obj) { 
+				return obj.volumeInfo.title; 
+			  },
+			  remote: {
+				url: 'https://www.googleapis.com/books/v1/volumes?q=%QUERY',
+				wildcard: '%QUERY'
+			  }
+			});
+
+			$('#quoter-query').typeahead({
+					hint: true,
+					highlight: true,
+					minLength: 1
+				},{
+					source: books
+				}
+			);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			var nflTeams = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('team'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  identify: function(obj) { 
+  return obj.team; 
+  },
+  prefetch: 'https://twitter.github.io/typeahead.js/data/nfl.json'
+});
+
+function nflTeamsWithDefaults(q, sync) {
+  if (q === '') {
+    sync(nflTeams.get('Detroit Lions', 'Green Bay Packers', 'Chicago Bears'));
+  }
+
+  else {
+    nflTeams.search(q, sync);
+  }
+}
+
+$('#default-suggestions .typeahead').typeahead({
+  minLength: 0,
+  highlight: true
+},
+{
+  name: 'nfl-teams',
+  display: 'team',
+  source: nflTeamsWithDefaults
+});
+		
+		</script>
+	</body>
+</html>

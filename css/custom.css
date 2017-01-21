@@ -1,0 +1,11 @@
+.lead > a.btn {
+	margin-top: 40px;
+}
+
+.twitter-typeahead{
+	width: 100%;
+}
+
+.tt-menu {
+	background-color: grey;
+}

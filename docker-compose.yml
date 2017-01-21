@@ -1,0 +1,6 @@
+quoter:
+  image: akkerman/rpi-nginx
+  volumes:
+    - .:/usr/share/nginx/www
+  ports:
+    - 8080:80
