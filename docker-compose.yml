@@ -1,6 +1,6 @@
 quoter:
   image: akkerman/rpi-nginx
   volumes:
-    - .:/usr/share/nginx/www
+    - /c/Users/Flo/checkout/quoter:/var/www/html
   ports:
     - 8080:80
